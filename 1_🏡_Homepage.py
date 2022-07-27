@@ -12,3 +12,6 @@ submit = st.button("Submit")
 if submit:
     st.session_state["my_input"] = my_input
     st.write("You entered:", my_input)
+    #pass all of this to Eleonors text generator?
+    #then those inputs are saved to a bucket that is retrieved by Vita's image generator
+    #this script then pulls those seperated bucket items into a booklike format demo'd on the BucketText.py page.
