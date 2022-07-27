@@ -19,11 +19,17 @@ def read_file(bucket_name, file_path):
     return content
 
 bucket_name = "thomas-demo-bucket"
-file_path = "myfile.csv"
+file_path = "prompt.txt"
 
 content = read_file(bucket_name, file_path)
 
 # Print results.
-for line in content.strip().split("\n"):
-    name, pet = line.split(",")
-    st.write(f"{name} has a :{pet}:")
+# for line in content.strip().split("\n"):
+#     name, pet = line.split(",")
+#     st.write(f"{name} has a :{pet}:")
+
+# print(content)
+st.write(content) #split this up into smaller sentences
+st.image(  st.session_state["test_image"]) #display the image from the previous page
+
+
