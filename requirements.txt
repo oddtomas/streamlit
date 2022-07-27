@@ -1,2 +1,2 @@
 # requirements.txt
-google-cloud-storage==x.x.x
+google-cloud-storage==2.4.0
