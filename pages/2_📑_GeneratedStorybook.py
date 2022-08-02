@@ -26,7 +26,10 @@ client = storage.Client(credentials=credentials)
 
 # content = read_file(bucket_name, file_path)
 
-
+# # Print results.
+# # for line in content.strip().split("\n"):
+# #     name, pet = line.split(",")
+# #     st.write(f"{name} has a :{pet}:")
 
 # # print(content)
 # st.write(content) #split this up into smaller sentences
@@ -48,6 +51,85 @@ client = storage.Client(credentials=credentials)
 
 
 
+
+# @st.experimental_memo(ttl=600)
+# def read_file(bucket_name, file_path):
+#     bucket = client.bucket(bucket_name)
+#     second_text = bucket.blob(file_path).download_as_string().decode("utf-8")
+#     return second_text
+
+# bucket_name = "thomas-demo-bucket"
+# file_path = "prompt2.txt"
+
+# second_text = read_file(bucket_name, file_path)
+
+# st.write(second_text) 
+
+
+# @st.experimental_memo(ttl=600)
+# def read_file(bucket_name, file_path):
+#     bucket = client.bucket(bucket_name)
+#     second_cloud_image = bucket.blob(file_path).download_as_bytes()
+#     return second_cloud_image
+
+# bucket_name = "thomas-demo-bucket"
+# file_path = "Clementine-fighting-monster.png"
+
+# second_cloud_image = read_file(bucket_name, file_path)
+
+
+# st.image(second_cloud_image)
+
+
+
+
+# @st.experimental_memo(ttl=600)
+# def read_file(bucket_name, file_path):
+#     bucket = client.bucket(bucket_name)
+#     second_text = bucket.blob(file_path).download_as_string().decode("utf-8")
+#     return second_text
+
+# bucket_name = "et-test-bucket"
+# file_path = "generatedText/text_0_20220728222402.txt"
+
+# test_text = read_file(bucket_name, file_path)
+
+# st.write(test_text) 
+
+
+#############################################################################################
+bucket = client.get_bucket("et-test-bucket")
+blobs = bucket.list_blobs()
+
+# for blob in blobs:
+#      if "text_" in blob.name:  #get the timestamp as a variable?
+#         test_text = blob.download_as_string().decode("utf-8") 
+#         st.write(test_text)
+        # print(blob)
+
+# img_bucket = client.get_bucket("et-test-bucket")
+# imgs = img_bucket.list_blobs(prefix="generatedImages/")
+# images = []
+
+# def list_blobs(bucket_name):
+#     """Lists all the blobs in the bucket."""
+#     # bucket_name = "your-bucket-name"
+
+#     storage_client = client
+
+#     # Note: Client.list_blobs requires at least package version 1.17.0.
+#     blobs = storage_client.list_blobs(bucket_name)
+
+#     for blob in blobs:
+#         if "image_" in blob.name:
+#             print(blob.name)
+#             image = blob.download_as_bytes()
+#             st.image(image)
+#             # print(blob)
+
+# list_blobs("et-test-bucket")
+
+# st.write("------------------------------------------------------")
 
 def list_blobs(bucket_name):
     """Lists all the blobs in the bucket."""
