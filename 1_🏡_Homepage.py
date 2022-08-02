@@ -1,7 +1,5 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import os
-
 import argparse
 from typing import Optional
 from google.cloud import pubsub_v1
@@ -13,14 +11,6 @@ from google.cloud import pubsub_v1
 st.set_page_config(page_title="Multipage APP", page_icon="✌")
 st.sidebar.title("Select a page above!")
 
-option_menu(
-    menu_title= None,
-    options= ["Homepage", "About", "Generated book"],
-    icons = ["house", "book", "envelope", "📝", "📷"],
-    default_index=0,
-    orientation="horizontal",
-
-)
 
 st.title("Input text to generate your own book!")
 
