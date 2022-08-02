@@ -101,53 +101,24 @@ client = storage.Client(credentials=credentials)
 bucket = client.get_bucket("et-test-bucket")
 blobs = bucket.list_blobs()
 
-# for blob in blobs:
-#      if "text_" in blob.name:  #get the timestamp as a variable?
-#         test_text = blob.download_as_string().decode("utf-8") 
-#         st.write(test_text)
-        # print(blob)
-
-# img_bucket = client.get_bucket("et-test-bucket")
-# imgs = img_bucket.list_blobs(prefix="generatedImages/")
-# images = []
-
-# def list_blobs(bucket_name):
-#     """Lists all the blobs in the bucket."""
-#     # bucket_name = "your-bucket-name"
-
-#     storage_client = client
-
-#     # Note: Client.list_blobs requires at least package version 1.17.0.
-#     blobs = storage_client.list_blobs(bucket_name)
-
-#     for blob in blobs:
-#         if "image_" in blob.name:
-#             print(blob.name)
-#             image = blob.download_as_bytes()
-#             st.image(image)
-#             # print(blob)
-
-# list_blobs("et-test-bucket")
-
-# st.write("------------------------------------------------------")
+collection = []
 
 def list_blobs(bucket_name):
     """Lists all the blobs in the bucket."""
     # bucket_name = "your-bucket-name"
 
-    storage_client = client
 
     # Note: Client.list_blobs requires at least package version 1.17.0.
-    blobs = storage_client.list_blobs(bucket_name)
 
-collection = []
+    # storage_client = client
+
+    # blobs = storage_client.list_blobs(bucket_name)
 
 for blob in blobs:
         if "text_" in blob.name:
             print(blob.name)
             test_text = blob.download_as_string().decode("utf-8") 
             collection.append(test_text)
-            # st.write(test_text)
 
 # for img in blobs:
 
@@ -155,12 +126,10 @@ for blob in blobs:
             print(blob)
             image = blob.download_as_bytes()
             collection.append(image)
-            # st.image(image)
             print(blob)
 
 list_blobs("et-test-bucket")
-# print(collection)
-# st.image(collection[0])
+
 
 d = {}
 d = {'image1': collection[0], 'text1': collection[10], 'image2': collection[1], 'text2': collection[11], 'image3': collection[2], 'text3': collection[12], 'image4': collection[3], 'text4': collection[13], 'image5': collection[4], 'text5': collection[14], 'image6': collection[5], 'text6': collection[15], 'image7': collection[6], 'text7': collection[16], 'image8': collection[7], 'text8': collection[17], 'image9': collection[8], 'text9': collection[18], 'image10': collection[9], 'text10': collection[19]}
