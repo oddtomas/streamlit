@@ -1,13 +1,34 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
+import os
+
+import argparse
+from typing import Optional
+from google.cloud import pubsub_v1
+
+
+
+
 
 st.set_page_config(page_title="Multipage APP", page_icon="✌")
-st.title("Input text to generate your own book!")
 st.sidebar.title("Select a page above!")
+
+option_menu(
+    menu_title= None,
+    options= ["Homepage", "About", "Generated book"],
+    icons = ["house", "book", "envelope", "📝", "📷"],
+    default_index=0,
+    orientation="horizontal",
+
+)
+
+st.title("Input text to generate your own book!")
+
 
 if "my_input" not in st.session_state:
     st.session_state["my_input"] = ""
 
-my_input = st.text_input("Input a character name here:", st.session_state["my_input"])
+my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"])
 submit = st.button("Submit")
 if submit:
     st.session_state["my_input"] = my_input
@@ -16,11 +37,4 @@ if submit:
     #then those inputs are saved to a bucket that is retrieved by Vita's image generator
     #this script then pulls those seperated bucket items into a booklike format demo'd on the BucketText.py page.
 
-if "action" not in st.session_state:
-    st.session_state["action"] = ""
 
-action = st.text_input("Input an action here:", st.session_state["action"])
-submit2 = st.button("Submit2")
-if submit2:
-    st.session_state["action"] = action
-    st.write("You entered:", action)
