@@ -1,4 +1,8 @@
 import streamlit as st
 
 st.title("OutputTest")
-st.write(  st.session_state["my_input"])
+
+if st.session_state["submitted"]:
+    st.write(  st.session_state["my_input"])
+
+
