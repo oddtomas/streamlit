@@ -37,4 +37,5 @@ if submit:
     #then those inputs are saved to a bucket that is retrieved by Vita's image generator
     #this script then pulls those seperated bucket items into a booklike format demo'd on the BucketText.py page.
 
-
+st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form a book.")
+st.video('https://www.youtube.com/watch?v=Xw-zxQSEzqo&ab_channel=Decycle')
