@@ -4,6 +4,8 @@ from numpy import test
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import storage
+# pdf test
+from fpdf import FPDF
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -185,3 +187,17 @@ st.write(d['text9'])
 st.image(d['image9'])
 st.write(d['text10'])
 st.image(d['image10'])
+
+
+# pdf creator
+# def createPdf():
+#     fpdf = FPDF()
+#     fpdf.add_page()
+#     fpdf.set_text_color(255, 0, 0)
+#     fpdf.set_font("Arial", size=12)
+#     fpdf.text(50,50, txt=d['text1'])
+#     # fpdf.image(d['image1'], x=10, y=10, w=40)
+#     fpdf.output("output6.pdf")
+
+# if __name__ == '__main__':
+#     createPdf()
