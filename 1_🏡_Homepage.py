@@ -9,7 +9,7 @@ import time
 
 
 st.set_page_config(page_title="Multipage APP", page_icon="✌")
-st.sidebar.title("Select a page above!")
+# st.sidebar.title("Select a page above!")
 
 
 st.title("Input text to generate your own book!")

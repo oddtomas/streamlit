@@ -156,7 +156,7 @@ if st.session_state["submitted"]: #change conditional to be if the generators ar
     st.write(d['text10'])
     st.image(d['image10'])
 else:
-    st.write("nothing to see here")
+    st.write("nothing to see here, submit your prompt to generate your book!")
 
 
 
