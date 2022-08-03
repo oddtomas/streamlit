@@ -26,10 +26,6 @@ client = storage.Client(credentials=credentials)
 
 # content = read_file(bucket_name, file_path)
 
-# # Print results.
-# # for line in content.strip().split("\n"):
-# #     name, pet = line.split(",")
-# #     st.write(f"{name} has a :{pet}:")
 
 # # print(content)
 # st.write(content) #split this up into smaller sentences
@@ -49,69 +45,23 @@ client = storage.Client(credentials=credentials)
 
 # st.image(cloud_image)
 
-
-
-
-# @st.experimental_memo(ttl=600)
-# def read_file(bucket_name, file_path):
-#     bucket = client.bucket(bucket_name)
-#     second_text = bucket.blob(file_path).download_as_string().decode("utf-8")
-#     return second_text
-
-# bucket_name = "thomas-demo-bucket"
-# file_path = "prompt2.txt"
-
-# second_text = read_file(bucket_name, file_path)
-
-# st.write(second_text) 
-
-
-# @st.experimental_memo(ttl=600)
-# def read_file(bucket_name, file_path):
-#     bucket = client.bucket(bucket_name)
-#     second_cloud_image = bucket.blob(file_path).download_as_bytes()
-#     return second_cloud_image
-
-# bucket_name = "thomas-demo-bucket"
-# file_path = "Clementine-fighting-monster.png"
-
-# second_cloud_image = read_file(bucket_name, file_path)
-
-
-# st.image(second_cloud_image)
-
-
-
-
-# @st.experimental_memo(ttl=600)
-# def read_file(bucket_name, file_path):
-#     bucket = client.bucket(bucket_name)
-#     second_text = bucket.blob(file_path).download_as_string().decode("utf-8")
-#     return second_text
-
-# bucket_name = "et-test-bucket"
-# file_path = "generatedText/text_0_20220728222402.txt"
-
-# test_text = read_file(bucket_name, file_path)
-
-# st.write(test_text) 
-
-
 #############################################################################################
 bucket = client.get_bucket("et-test-bucket")
 blobs = bucket.list_blobs()
 
 collection = []
+d = {}
 
-def list_blobs(bucket_name):
+if "filled" not in st.session_state:
+    st.session_state["filled"] = False
+
+def filled():        
+    if len(d) == 20:
+        st.session_state["filled"] = True
+        print(len(d))
+
+def list_blobs():
     """Lists all the blobs in the bucket."""
-    # bucket_name = "your-bucket-name"
-
-    # Note: Client.list_blobs requires at least package version 1.17.0.
-
-    # storage_client = client
-
-    # blobs = storage_client.list_blobs(bucket_name)
 
 for blob in blobs:
         if "text_" in blob.name:
@@ -127,11 +77,23 @@ for blob in blobs:
             collection.append(image)
             print(blob)
 
-list_blobs("et-test-bucket")
-
-
-d = {}
+list_blobs()
 d = {'image1': collection[0], 'text1': collection[10], 'image2': collection[1], 'text2': collection[11], 'image3': collection[2], 'text3': collection[12], 'image4': collection[3], 'text4': collection[13], 'image5': collection[4], 'text5': collection[14], 'image6': collection[5], 'text6': collection[15], 'image7': collection[6], 'text7': collection[16], 'image8': collection[7], 'text8': collection[17], 'image9': collection[8], 'text9': collection[18], 'image10': collection[9], 'text10': collection[19]}
+filled()
+
+
+# if st.session_state["filled"]:    
+#     st.write(" your book is ready!")
+
+st.markdown("""
+<style>
+.big-font {
+    font-size:50px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown('<p class="big-font">Here&#8217s your story!!</p>', unsafe_allow_html=True)
 
 if st.session_state["submitted"]: #change conditional to be if the generators are done/ send a pubsub?
 # display in order of the keys
