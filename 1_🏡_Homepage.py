@@ -1,108 +1,80 @@
 import streamlit as st
-import os
-import argparse
-from typing import Optional
-from google.cloud import pubsub_v1
 import time
 from google.oauth2 import service_account
 from google.cloud import storage
-# from GeneratedStorybook import filled
-# import GeneratedStorybook
-
-# pdf test
-# from fpdf import FPDF
 
 # Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
+credentials = service_account.Credentials.from_service_account_info( 
+    st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
 )
-client = storage.Client(credentials=credentials)
+client = storage.Client(credentials=credentials)  #change to credentials
+bucket = client.get_bucket("et-test-bucket") #change to bucket name
 
-bucket = client.get_bucket("et-test-bucket")
-
-st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖")
-# st.sidebar.title("Select a page above!")
-
-
-st.title("Input text to generate your own book!")
+st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
+st.title("SADA R&D Book Generator") #change page title
 
 
-if "my_input" not in st.session_state:
+if "my_input" not in st.session_state: #set the session state to be empty
     st.session_state["my_input"] = ""
 
-st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form a book.")
-my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"])
-submit = st.button("Submit")
+st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form your own custom book.")
+my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
+submit = st.button("Submit") #set submit
 
-def write_to_file(text):
-    with open("prompt.txt", "w") as f:
+def write_to_file(text): #takes the user entered input and writes it to a file when called below
+    with open("prompt.txt", "w") as f: #file named prompt.txt
         f.write(text)
 
-def upload_file(file_path):
-    blob = bucket.blob(file_path)
+def upload_file(file_path): #upload the file to GCP, file path is the "prompt.txt" file that is passed when the function is called
+    blob = bucket.blob(file_path) 
     blob.upload_from_filename(file_path)
 
 
-if "submitted" not in st.session_state:
+if "submitted" not in st.session_state: #set the session state to be False
     st.session_state["submitted"] = False
 
-if submit:
-    st.session_state["submitted"] = True
-    st.session_state["my_input"] = my_input
-    write_to_file(st.session_state["my_input"])
-    upload_file("prompt.txt")
-    with st.empty():
-     for seconds in range(5): #make this range wait for a pubsub message?
-         st.write(f"⏳ generating....")
-         time.sleep(1)
-         st.write("")
-    
-# check for blobs length
-    # exec(open("GeneratedStorybook.py").read()) #pubsub to call this command?
+if submit: #if the submit button is pressed, do this stuff.
+    st.session_state["submitted"] = True #set the session state to be True
+    st.session_state["my_input"] = my_input #set the session state to be the user input
+    write_to_file(st.session_state["my_input"]) #write the user input to a file
+    # upload_file("prompt.txt") #upload the file to GCP
 
-bucket = client.get_bucket("et-test-bucket")
-blobs = bucket.list_blobs()
 
-collection = []
-d = {}
+# exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
 
-if "filled" not in st.session_state:
+if "filled" not in st.session_state: #set the session state to be False
     st.session_state["filled"] = False
 
 def filled():        
-    if len(d) == 20:
+    if len(d) == 20: #if the dictionary has 20 keys, then the generators are done (10 text and 10 images)
         st.session_state["filled"] = True
-        print(len(d))
+        # print(len(d))
+
+blobs = bucket.list_blobs() #list all the blobs in the bucket
+collection = [] #create a collection to store the blobs
+d = {} #create a dictionary to store the blobs
 
 def list_blobs():
-    """Lists all the blobs in the bucket."""
 
-    for blob in blobs:
-        if "text_" in blob.name:
-            print(blob.name)
+    for blob in blobs: #for each blob in the bucket
+        if "text_" in blob.name: #if the blob name contains "text_"/ *change this to metadata*
+            # print(blob.name)
             test_text = blob.download_as_string().decode("utf-8") 
             collection.append(test_text)
 
-# for img in blobs:
-
-        if "image_" in blob.name:
-            print(blob)
+        if "image_" in blob.name: #if the blob name contains "image_"/ *change this to metadata*
+            # print(blob)
             image = blob.download_as_bytes()
             collection.append(image)
-            print(blob)
 
-list_blobs()
-d = {'image1': collection[0], 'text1': collection[10], 'image2': collection[1], 'text2': collection[11], 'image3': collection[2], 'text3': collection[12], 'image4': collection[3], 'text4': collection[13], 'image5': collection[4], 'text5': collection[14], 'image6': collection[5], 'text6': collection[15], 'image7': collection[6], 'text7': collection[16], 'image8': collection[7], 'text8': collection[17], 'image9': collection[8], 'text9': collection[18], 'image10': collection[9], 'text10': collection[19]}
-filled()
+list_blobs() #call the list_blobs function to filter through the bucket and store the blobs in the collection
 
+d = {'image1': collection[0], 'text1': collection[10], 'image2': collection[1], 'text2': collection[11], 'image3': collection[2], 'text3': collection[12], 'image4': collection[3], 'text4': collection[13], 'image5': collection[4], 'text5': collection[14], 'image6': collection[5], 'text6': collection[15], 'image7': collection[6], 'text7': collection[16], 'image8': collection[7], 'text8': collection[17], 'image9': collection[8], 'text9': collection[18], 'image10': collection[9], 'text10': collection[19] } #create a dictionary to store the blobs
 
-# if st.session_state["filled"]:    
-#     st.write(" your book is ready!")
-
+filled() #call the filled function to check if the dictionary has 20 keys and set the session state to be True
 
 def output():
-    if st.session_state["submitted"] and st.session_state["filled"]: #change conditional to be if the generators are done/ send a pubsub?
-# display in order of the keys
+    if st.session_state["submitted"] and st.session_state["filled"]: #if the user has submitted and the dictionary has 20 keys, then do this stuff
         st.markdown("""
 <style>
 .big-font {
@@ -133,16 +105,21 @@ def output():
         st.write(d['text10'])
         st.image(d['image10'])
     else:
-        with st.empty():
-            for seconds in range(5): 
-                st.write(".............")
-                time.sleep(1)
-                st.write("Nothing to see here......... yet! Submit your prompt to generate your book!")
+        st.write("Nothing to see here......... yet! Submit your prompt to generate your book!")
 
-if st.session_state["submitted"] and st.session_state["filled"]:
-    output()
-#else try to check dictionary length or blob again? and call output() if it's filled?
-#create storage trigger to let me know when text and image 10 are ready?
+def checker(): #check if the user has submitted and the dictionary has 20 keys
+    if st.session_state["submitted"] and st.session_state["filled"]:
+        output() #if the user has submitted and the dictionary has 20 keys, then call output to write the story
+    else:
+        with st.empty(): #empty the page
+            for seconds in range(10): 
+                st.write(f"⏳ generating....")
+                time.sleep(20)
+                st.empty()
+                print("running2")
+        checker() #if the user has not submitted or the dictionary has not 20 keys, then call checker to check again
 
+if st.session_state["submitted"]: #if the user has submitted, then call checker to write the story
+    checker() #call checker to write the story recursively?
 
 
