@@ -20,7 +20,7 @@ client = storage.Client(credentials=credentials)
 
 bucket = client.get_bucket("et-test-bucket")
 
-st.set_page_config(page_title="Multipage APP", page_icon="🤖")
+st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖")
 # st.sidebar.title("Select a page above!")
 
 
@@ -50,7 +50,7 @@ if submit:
     st.session_state["submitted"] = True
     st.session_state["my_input"] = my_input
     write_to_file(st.session_state["my_input"])
-    # upload_file("prompt.txt")
+    upload_file("prompt.txt")
     with st.empty():
      for seconds in range(5): #make this range wait for a pubsub message?
          st.write(f"⏳ generating....")
@@ -141,8 +141,8 @@ def output():
 
 if st.session_state["submitted"] and st.session_state["filled"]:
     output()
-
-
+#else try to check dictionary length or blob again? and call output() if it's filled?
+#create storage trigger to let me know when text and image 10 are ready?
 
 
 
