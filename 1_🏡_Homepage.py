@@ -37,7 +37,7 @@ if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
     write_to_file(st.session_state["my_input"]) #write the user input to a file
-    # upload_file("prompt.txt") #upload the file to GCP
+    upload_file("prompt.txt") #upload the file to GCP
 
 
 # exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
