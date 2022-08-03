@@ -4,9 +4,18 @@ import argparse
 from typing import Optional
 from google.cloud import pubsub_v1
 import time
+from google.oauth2 import service_account
+from google.cloud import storage
+# pdf test
+# from fpdf import FPDF
 
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = storage.Client(credentials=credentials)
 
-
+bucket = client.get_bucket("et-test-bucket")
 
 st.set_page_config(page_title="Multipage APP", page_icon="✌")
 # st.sidebar.title("Select a page above!")
@@ -23,19 +32,28 @@ my_input = st.text_input("Enter a prompt here to create your story!", st.session
 submit = st.button("Submit")
 st.video('https://www.youtube.com/watch?v=Xw-zxQSEzqo&ab_channel=Decycle')
 
+def write_to_file(text):
+    with open("prompt.txt", "w") as f:
+        f.write(text)
+
+def upload_file(file_path):
+    blob = bucket.blob(file_path)
+    blob.upload_from_filename(file_path)
+
+
 if "submitted" not in st.session_state:
     st.session_state["submitted"] = False
 
 if submit:
     st.session_state["submitted"] = True
     st.session_state["my_input"] = my_input
-    # st.write("You entered:", my_input)
+    write_to_file(st.session_state["my_input"])
+    upload_file("prompt.txt")
     with st.empty():
      for seconds in range(5): #make this range wait for a pubsub message?
          st.write(f"⏳ {seconds} seconds have passed")
          time.sleep(1)
      st.write("✔️ your book is ready!")
-    #pass all of this to Eleonors text generator?
-    #then those inputs are saved to a bucket that is retrieved by Vita's image generator
-    #this script then pulls those seperated bucket items into a booklike format demo'd on the BucketText.py page.
+
+
 

@@ -159,6 +159,16 @@ else:
     st.write("nothing to see here, submit your prompt to generate your book!")
 
 
+# test print loop?
+# def myprint(d):
+#     for k, v in d.items():
+#         if isinstance(v, dict):
+#             st.write(d[v])
+#         else:
+#             st.write("{0} : {1}".format(k, v))
+
+
+# myprint(d)
 
 
 # pdf creator
