@@ -77,7 +77,7 @@ def filled():
 def list_blobs():
     """Lists all the blobs in the bucket."""
 
-for blob in blobs:
+    for blob in blobs:
         if "text_" in blob.name:
             print(blob.name)
             test_text = blob.download_as_string().decode("utf-8") 
