@@ -1,3 +1,2 @@
 # requirements.txt
 google-cloud-storage==2.4.0
-streamlit_lottie==0.2.0
