@@ -36,7 +36,7 @@ st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #chan
 
 st.title("SADA R&D Book Generator") #change page title
 
-
+# 
 
 if "my_input" not in st.session_state: #set the session state to be empty
     st.session_state["my_input"] = ""
