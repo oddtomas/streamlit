@@ -2,6 +2,25 @@ import streamlit as st
 import time
 from google.oauth2 import service_account
 from google.cloud import storage
+from streamlit_lottie import st_lottie
+import json
+import requests
+
+def load_lottiefile(filepath: str): #load the lottie file from the filepath
+    with open(filepath, "r") as f:
+        return json.load(f)
+
+def load_lottieurl(url: str): #load the lottie file from the url
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_hello = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_q77jpumk.json") 
+# lottie_coding = load_lottiefile("sprinkle.json")
+
+# with open('style.css') as f:
+#     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info( 
@@ -11,15 +30,28 @@ client = storage.Client(credentials=credentials)  #change to credentials
 bucket = client.get_bucket("et-test-bucket") #change to bucket name
 
 st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
+
+
+# exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
+
 st.title("SADA R&D Book Generator") #change page title
+
 
 
 if "my_input" not in st.session_state: #set the session state to be empty
     st.session_state["my_input"] = ""
 
 st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form your own custom book.")
+
+st_lottie( #create a lottie animation
+    lottie_hello,
+    height=500,
+    width=500,
+)
+
 my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
 submit = st.button("Submit") #set submit
+
 
 def write_to_file(text): #takes the user entered input and writes it to a file when called below
     with open("prompt.txt", "w") as f: #file named prompt.txt
@@ -73,6 +105,16 @@ d = {'image1': collection[0], 'text1': collection[10], 'image2': collection[1], 
 
 filled() #call the filled function to check if the dictionary has 20 keys and set the session state to be True
 
+
+def card(text): #create a card with the id, text and image
+    return f"""
+    <div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <p class="card-text">{text}</p>
+    </div>
+    </div>
+    """
+
 def output():
     if st.session_state["submitted"] and st.session_state["filled"]: #if the user has submitted and the dictionary has 20 keys, then do this stuff
         st.markdown("""
@@ -82,27 +124,36 @@ def output():
 }
 </style>
 """, unsafe_allow_html=True)
-
         st.markdown('<p class="big-font">Here&#8217s your story!!</p>', unsafe_allow_html=True)
-        st.write(d['text1'])
+        # st.write(d['text1'])
+        st.markdown(card(d['text1']), unsafe_allow_html=True)
         st.image(d['image1'])
-        st.write(d['text2'])
+        # st.write(d['text2'])
+        st.markdown(card(d['text2']), unsafe_allow_html=True)
         st.image(d['image2'])
-        st.write(d['text3'])
+        # st.write(d['text3'])
+        st.markdown(card(d['text3']), unsafe_allow_html=True)
         st.image(d['image3'])
-        st.write(d['text4'])
+        # st.write(d['text4'])
+        st.markdown(card(d['text4']), unsafe_allow_html=True)
         st.image(d['image4'])
-        st.write(d['text5'])
+        # st.write(d['text5'])
+        st.markdown(card(d['text5']), unsafe_allow_html=True)
         st.image(d['image5'])
-        st.write(d['text6'])
+        # st.write(d['text6'])
+        st.markdown(card(d['text6']), unsafe_allow_html=True)
         st.image(d['image6'])
-        st.write(d['text7'])
+        # st.write(d['text7'])
+        st.markdown(card(d['text7']), unsafe_allow_html=True)
         st.image(d['image7'])
-        st.write(d['text8'])
+        # st.write(d['text8'])
+        st.markdown(card(d['text7']), unsafe_allow_html=True)
         st.image(d['image8'])
-        st.write(d['text9'])
+        # st.write(d['text9'])
+        st.markdown(card(d['text9']), unsafe_allow_html=True)
         st.image(d['image9'])
-        st.write(d['text10'])
+        # st.write(d['text10'])
+        st.markdown(card(d['text10']), unsafe_allow_html=True)
         st.image(d['image10'])
     else:
         st.write("Nothing to see here......... yet! Submit your prompt to generate your book!")
@@ -119,7 +170,10 @@ def checker(): #check if the user has submitted and the dictionary has 20 keys
                 print("running2")
         checker() #if the user has not submitted or the dictionary has not 20 keys, then call checker to check again
 
+
+
 if st.session_state["submitted"]: #if the user has submitted, then call checker to write the story
     checker() #call checker to write the story recursively?
+
 
 
