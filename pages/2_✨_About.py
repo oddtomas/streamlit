@@ -26,4 +26,5 @@ st_lottie( #create a lottie animation
 )
 st.write("Repo: [Github](https://github.com/oddtomas/streamlit)")
 st.write("Group Documentation: [Group Doc](https://docs.google.com/document/d/1-3lxVgDYyr1lMRG55oV1xZKveldzhXtComIsQEUj5L0)")
-
+st.write("Devs: [Thomas](https://www.linkedin.com/in/thomas-nguyen-9665761a7/), [Eleonor](https://www.linkedin.com/in/eleonor-t-a041b122/), [Vita](https://www.linkedin.com/in/vitarabinovich/)")
+st.write("Mentor: Bob Bae")
