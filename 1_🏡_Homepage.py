@@ -60,6 +60,17 @@ submit = st.button("Submit") #set submit
 #     blob = bucket.blob(file_path) 
 #     blob.upload_from_filename(file_path)
 
+def postToFlask(prompt):
+    # prompt = "what is broken"
+# response = requests.get("http://127.0.0.1:5000/api/get-json")
+    response = requests.post('http://127.0.0.1:5000/api/get-json', data = prompt)
+    if (response.status_code == 200):
+        print("The request was a success!")
+    # Code here will only run if the request is successful
+    elif (response.status_code == 404):
+        print("Result not found!")
+# print(response)
+    print(response.json())
 
 if "submitted" not in st.session_state: #set the session state to be False
     st.session_state["submitted"] = False
@@ -68,11 +79,15 @@ if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
     st.write("Generating your story... go to the story tab!") #write to the streamlit page that the story is being generated
+    postToFlask(my_input) #call the postToFlask function and pass the user input as the parameter
     # write_to_file(st.session_state["my_input"]) #write the user input to a file
     # upload_file("prompt.txt") #upload the file to GCP
     # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
 
 #MAKE THIS CHECK IF BUCKET HAS ANYTHING IN IT, BEFORE INSTRUCTING TO GO TO STORY TAB!
+
+
+
 
 #GET our test server
 # URL = "http://34.172.48.39:5000/hello"
