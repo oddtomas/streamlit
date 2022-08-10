@@ -1,11 +1,9 @@
 import streamlit as st
-import time
 from google.oauth2 import service_account
 from google.cloud import storage
 from streamlit_lottie import st_lottie
 import json
 import requests
-import sys
 
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
@@ -75,5 +73,15 @@ if submit: #if the submit button is pressed, do this stuff.
     # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
 
 #MAKE THIS CHECK IF BUCKET HAS ANYTHING IN IT, BEFORE INSTRUCTING TO GO TO STORY TAB!
+
+#GET our test server
+# URL = "http://34.172.48.39:5000/hello"
+# location = "delhi technological university"
+# PARAMS = {'address':location}
+# r = requests.get(url = URL, params = PARAMS)
+# data = r.json()
+# print(data)
+
+
 
 

@@ -1,17 +1,18 @@
-from cgi import test
-from numpy import tri
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import storage
 from google.cloud import pubsub_v1
 import os
 from streamlit.scriptrunner.script_run_context import get_script_run_ctx
-import json
-import time
+from concurrent.futures import TimeoutError
+from streamlit.scriptrunner.script_run_context import get_script_run_ctx
+    
+imagePrompts = {}
 
-dictionary = {}
 
-def list_blobs_with_prefix( prefix):
+def list_blobs_with_prefix( ):
+# def list_blobs_with_prefix( prefix ):
+
    
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
@@ -20,35 +21,32 @@ def list_blobs_with_prefix( prefix):
     bucket = storage_client.get_bucket("et-test-bucket")
 
 
-    blobs = bucket.list_blobs(prefix=prefix)
+    blobs = bucket.list_blobs()
+    # blobs = bucket.list_blobs(prefix=prefix)
 
-    print('Blobs:')
+    print('Blobs:', blobs)
 
-    
 
     for blob in blobs:
         
-        if blob.metadata['prompt'] in dictionary.values():
+        if blob.metadata['prompt'] in imagePrompts.values():
             print("already in collection")
+        elif len(imagePrompts) >= 5:
+            print("collection full")
         else:
-            dictionary.update({blob.name:blob.metadata['prompt']})
-            print("dictionary",dictionary)
+            imagePrompts.update({blob.name: blob.metadata['prompt']})
+            # imagePrompts[blob.name] = blob.metadata['prompt']
+            print("imagePrompts",imagePrompts)
+            print("imagePrompts.values()",imagePrompts.values())
             st.write(blob.metadata['prompt']) 
             st.image(blob.download_as_bytes())
-            
+
 
 # ###########################`###############################
 
-from concurrent.futures import TimeoutError
-from streamlit.scriptrunner.script_run_context import get_script_run_ctx
-from threading import Thread
-
 def subscriberz():
-    credentials_path = '/Users/thomas.nguyen/Desktop/streamlit/.streamlit/key.json'
+    credentials_path = '/Users/thatg/Desktop/streamlit_app/.streamlit/key.json'
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
-    # credentials_path = service_account.Credentials.from_service_account_info( 
-    # st.secrets["gcp_service_account"])
-
 
     timeout = 20
 
@@ -57,10 +55,13 @@ def subscriberz():
 
 # streamlit run homepage.py
     def callback(message):
-        global d
+        # global d
 
-        output = message.data.decode('utf-8')
-        d = json.loads(output)
+        # output = message.data.decode('utf-8')
+        # d = json.loads(output)
+        # print("data",message.data)
+        # print(output)
+        # print("message",message)
         print("callback ran")
         message.ack()
 
@@ -76,10 +77,16 @@ def subscriberz():
 
         except TimeoutError:
             streaming_pull_future.cancel()
-            list_blobs_with_prefix("flaskTrial/")
+            list_blobs_with_prefix()
+            # list_blobs_with_prefix("results/")
             streaming_pull_future.result() 
+            print("this is the dictionary at the end of a loop",imagePrompts)
             print("this is the end of the subscriber")
-            subscriberz()
+            if len(imagePrompts) >= 5:
+                streaming_pull_future.cancel()
+            else:
+                subscriberz()
+
 if st.session_state["submitted"] == True:
     st.empty()
     subscriberz()
