@@ -3,6 +3,11 @@ from streamlit_lottie import st_lottie
 import json
 import requests
 
+st.markdown('<a href="/" target="_self">Home</a>', unsafe_allow_html=True)
+st.markdown('<a href="/About" target="_self">About</a>', unsafe_allow_html=True)
+if st.session_state.get("finished", True):
+    st.markdown('<a href="/SavedBook" target="_self">Finished BooK</a>', unsafe_allow_html=True)
+    
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)

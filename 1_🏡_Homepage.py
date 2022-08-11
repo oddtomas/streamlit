@@ -31,12 +31,12 @@ lottie_hello = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_q77
 lottie_yoda = load_lottieurl("https://assets2.lottiefiles.com/animated_stickers/lf_tgs_fhiz0fdc.json")
 
 
-def getToFlask(prompt):
+def getToFlask(prompt): 
     BASE = "http://34.172.48.39:5000/"
     # print("this is the passed prompt:",prompt)
     frontEndPrompt = prompt
     try:
-        response = requests.get(BASE + "book/"+ frontEndPrompt,timeout=10)
+        response = requests.get(BASE + "book/"+ frontEndPrompt,timeout=10) #GET is blocking, so we use a timeout
         if (response.status_code == 200):
             print("The request was a success!")
     # Code here will only run if the request is successful
@@ -57,8 +57,9 @@ st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #chan
 
 st.markdown('<a href="/" target="_self">Home</a>', unsafe_allow_html=True)
 st.markdown('<a href="/About" target="_self">About</a>', unsafe_allow_html=True)
-if st.session_state.get("finished", True):
-    st.markdown('<a href="/SavedBook" target="_self">Finished BooK</a>', unsafe_allow_html=True)
+def navFinishedBook():
+    if st.session_state.get("finished", True):
+        st.markdown('<a href="/SavedBook" target="_self">Finished BooK</a>', unsafe_allow_html=True)
 # exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
 
 st.title("SADA R&D Book Generator") #change page title
@@ -79,14 +80,6 @@ st_lottie( #create a lottie animation
 my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
 submit = st.button("Submit") #set submit
 
-# def postToFlask(prompt):
-
-#     response = requests.post('http://127.0.0.1:5000/api/get-json', data = prompt)
-#     if (response.status_code == 200):
-#         print("The request was a success!")
-#     elif (response.status_code == 404):
-#         print("Result not found!")
-#     print(response.json())
 
 if "submitted" not in st.session_state: #set the session state to be False
     st.session_state["submitted"] = False
@@ -204,9 +197,10 @@ def subscriberz():
             print("this is the end of the subscriber")
             if len(imagePrompts) >= 3:
                 yoda.empty()
+                # placeholder.empty()
                 placeholder.text("Your book is ready SADAIAN!!")
-                placeholder.empty()
                 st.session_state["finished"] = True
+                navFinishedBook()
                 streaming_pull_future.cancel()
                 st.stop()
             else:
@@ -222,7 +216,7 @@ if st.session_state["submitted"] == True:
         for percent_complete in range(100):
             time.sleep(0.1)
             my_bar.progress(percent_complete + 1)
-        time.sleep(10)
+        time.sleep(5)
     placeholder.empty()
     yoda = st.empty()
     with yoda.container():
