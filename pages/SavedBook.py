@@ -1,16 +1,7 @@
-from cgi import test
-from numpy import tri
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import storage
-from google.cloud import pubsub_v1
-import os
-from streamlit.scriptrunner.script_run_context import get_script_run_ctx
-import json
-import time
-from concurrent.futures import TimeoutError
-from streamlit.scriptrunner.script_run_context import get_script_run_ctx
-from threading import Thread
+
 
 imagePrompts = {}
 
@@ -34,7 +25,7 @@ def list_blobs_with_prefix( ):
 
         if blob.metadata['prompt'] in imagePrompts.values():
             print("already in collection")
-        elif len(imagePrompts) >= 5:
+        elif len(imagePrompts) >= 3:
             print("collection full")
         else:
             imagePrompts.update({blob.name:blob.metadata['prompt']})
