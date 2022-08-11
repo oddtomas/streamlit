@@ -128,7 +128,9 @@ imagePrompts = {}
 
 def list_blobs_with_prefix( ):
 # def list_blobs_with_prefix( prefix ):
-
+#     credentials = service_account.Credentials.from_service_account_info( 
+#     st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
+# )
    
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
@@ -161,12 +163,20 @@ def list_blobs_with_prefix( ):
 # ###########################`###############################
 
 def subscriberz():
-    credentials_path = '/Users/thatg/Desktop/streamlit_app/.streamlit/key.json'
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
+    # credentials_path = '/Users/thomas.nguyen/Desktop/streamlit/.streamlit/key.json'
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS']
+    credentials = service_account.Credentials.from_service_account_info( 
+    st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
+)
+   
+#     credentials = service_account.Credentials.from_service_account_info( 
+#     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
+# )
 
     timeout = 10
 
-    subscriber = pubsub_v1.SubscriberClient()
+    subscriber = pubsub_v1.SubscriberClient(credentials=credentials)
     subscription_path = 'projects/acto-su-1/subscriptions/bucket-updates'
 
 # streamlit run homepage.py
