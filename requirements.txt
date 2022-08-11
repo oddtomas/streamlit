@@ -1,3 +1,7 @@
 # requirements.txt
 google-cloud-storage==2.4.0
 streamlit_lottie
+google-auth
+google-cloud-storage
+streamlit
+google-cloud-pubsub
