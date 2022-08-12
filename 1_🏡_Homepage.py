@@ -69,7 +69,7 @@ st.title("SADA R&D Book Generator") #change page title
 if "my_input" not in st.session_state: #set the session state to be empty
     st.session_state["my_input"] = ""
 
-st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form your own custom book.")
+st.write("This is a GCP project utilizing EleutherAI’s  GPT-J-6B and Imagen-pytorch Real-ESRGAN to generate text and images to form your own custom book.")
 
 st_lottie( #create a lottie animation
     lottie_hello,
@@ -142,7 +142,7 @@ def list_blobs_with_prefix( ):
         
         if blob.metadata['text'] in imagePrompts.values():
             print("already in collection")
-        elif len(imagePrompts) >= 5:
+        elif len(imagePrompts) >= 11:
             print("collection full")
         else:
             imagePrompts.update({blob.name: blob.metadata['text']})
@@ -195,7 +195,7 @@ def subscriberz():
             streaming_pull_future.result() 
             print("this is the dictionary at the end of a loop",imagePrompts)
             print("this is the end of the subscriber")
-            if len(imagePrompts) >= 5:
+            if len(imagePrompts) >= 11:
                 yoda.empty()
                 # placeholder.empty()
                 placeholder.text("Your book is ready SADAIAN!!")
