@@ -23,14 +23,14 @@ def list_blobs_with_prefix( ):
 
     for blob in blobs:
 
-        if blob.metadata['prompt'] in imagePrompts.values():
+        if blob.metadata['text'] in imagePrompts.values():
             print("already in collection")
-        elif len(imagePrompts) >= 3:
+        elif len(imagePrompts) >= 5:
             print("collection full")
         else:
-            imagePrompts.update({blob.name:blob.metadata['prompt']})
+            imagePrompts.update({blob.name:blob.metadata['text']})
             print("imagePrompts",imagePrompts)
-            st.write(blob.metadata['prompt']) 
+            st.write(blob.metadata['text']) 
             st.image(blob.download_as_bytes())
 
 # list_blobs_with_prefix("results/")
