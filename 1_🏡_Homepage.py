@@ -76,8 +76,8 @@ st_lottie( #create a lottie animation
     height=500,
     width=500,
 )
-
-my_input = st.text_input("Enter a prompt here to create your story!", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
+ 
+my_input = st.text_input("Please enter the first sentence of your children's book. Example: 'The rainbow unicorn and fluffily giraffe went hopping along the clouds.'", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
 submit = st.button("Submit") #set submit
 
 
