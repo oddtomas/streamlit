@@ -25,7 +25,7 @@ def list_blobs_with_prefix( ):
 
         if blob.metadata['text'] in imagePrompts.values():
             print("already in collection")
-        elif len(imagePrompts) >= 5:
+        elif len(imagePrompts) >= 11:
             print("collection full")
         else:
             imagePrompts.update({blob.name:blob.metadata['text']})
