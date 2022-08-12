@@ -69,7 +69,7 @@ st.title("SADA R&D Book Generator") #change page title
 if "my_input" not in st.session_state: #set the session state to be empty
     st.session_state["my_input"] = ""
 
-st.write("This is a GCP project utilizing GPT3 and Dalle-2 AI to generate text and images to form your own custom book.")
+st.write("This is a GCP project utilizing EleutherAI’s  GPT-J-6B and Imagen-pytorch Real-ESRGAN to generate text and images to form your own custom book.")
 
 st_lottie( #create a lottie animation
     lottie_hello,
