@@ -91,7 +91,7 @@ if "submitted" not in st.session_state: #set the session state to be False
 if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
-    # getToFlask(my_input)   
+    getToFlask(my_input)   
 
 
 # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
