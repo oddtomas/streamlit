@@ -3,11 +3,14 @@ from streamlit_lottie import st_lottie
 import json
 import requests
 
-st.markdown('<a href="/" target="_self">Home</a>', unsafe_allow_html=True)
-st.markdown('<a href="/About" target="_self">About</a>', unsafe_allow_html=True)
-if st.session_state.get("finished", True):
-    st.markdown('<a href="/SavedBook" target="_self">Finished BooK</a>', unsafe_allow_html=True)
-    
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
+st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
+def navFinishedBook():
+    if st.session_state.get("finished", True):
+        st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)
@@ -18,13 +21,13 @@ def load_lottieurl(url: str): #load the lottie file from the url
         return None
     return r.json()
 
-lottie_hello = load_lottieurl("https://assets10.lottiefiles.com/packages/lf20_lzpnnin5.json") 
-# lottie_coding = load_lottiefile("sprinkle.json")
+# lottie_hello = load_lottieurl("https://assets10.lottiefiles.com/packages/lf20_lzpnnin5.json") 
+lottie_dog = load_lottiefile("lottie/dog.json")
 
 st.title("About")
 
 st_lottie( #create a lottie animation
-    lottie_hello,
+    lottie_dog,
     height=500,
     width=500,
 )

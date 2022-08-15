@@ -3,7 +3,6 @@ from streamlit_lottie import st_lottie
 import json
 import requests
 import webbrowser
-import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import storage
 from google.cloud import pubsub_v1
@@ -11,7 +10,11 @@ import os
 from concurrent.futures import TimeoutError
 import time
 
+st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
+
 #USE FOR NAVBAR?
+    # url = "http://localhost:8501/GeneratedBook"
+    # webbrowser.open_new_tab(url)
 
 if "finished" not in st.session_state: #set the session state to be False
     st.session_state["finished"] = False
@@ -20,15 +23,14 @@ def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)
 
-def load_lottieurl(url: str): #load the lottie file from the url
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
+# def load_lottieurl(url: str): #load the lottie file from the url
+#     r = requests.get(url)
+#     if r.status_code != 200:
+#         return None
+#     return r.json()
 
-lottie_hello = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_q77jpumk.json") 
-# lottie_coding = load_lottiefile("sprinkle.json")
-lottie_yoda = load_lottieurl("https://assets2.lottiefiles.com/animated_stickers/lf_tgs_fhiz0fdc.json")
+lottie_gears = load_lottiefile("lottie/gears.json")
+lottie_yoda = load_lottiefile("lottie/yoda.json")
 
 
 def getToFlask(prompt): 
@@ -44,23 +46,25 @@ def getToFlask(prompt):
             print("Result not found!")        
     except requests.exceptions.ReadTimeout: 
         pass
-    # response = requests.get(BASE + "book/"+ frontEndPrompt)
-    # response = requests.get(BASE + prompt)
 
 
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# with open('style.css') as f:
-#     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-
-st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
-
-st.markdown('<a href="/" target="_self">Home</a>', unsafe_allow_html=True)
-st.markdown('<a href="/About" target="_self">About</a>', unsafe_allow_html=True)
+st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
+st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
 def navFinishedBook():
     if st.session_state.get("finished", True):
-        st.markdown('<a href="/SavedBook" target="_self">Finished BooK</a>', unsafe_allow_html=True)
+        st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
 # exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
+def card(text): #create a card with the id, text and image
+    return f"""
+    <div class="card" style="width: 10 rem;">
+    <div class="card-body">
+        <p class="card-text">{text}</p>
+    </div>
+    </div>
+    """
 
 st.title("SADA R&D Book Generator") #change page title
 
@@ -72,12 +76,12 @@ if "my_input" not in st.session_state: #set the session state to be empty
 st.write("This is a GCP project utilizing EleutherAI’s  GPT-J-6B and Imagen-pytorch Real-ESRGAN to generate text and images to form your own custom book.")
 
 st_lottie( #create a lottie animation
-    lottie_hello,
+    lottie_gears,
     height=500,
     width=500,
 )
- 
-my_input = st.text_input("Please enter the first sentence of your children's book. Example: 'The rainbow unicorn and fluffily giraffe went hopping along the clouds.'", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
+st.write("Please enter the first sentence of your children's book.")
+my_input = st.text_input("Example: \"The rainbow unicorn and fluffy giraffe went hopping along the clouds.\"", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
 submit = st.button("Submit") #set submit
 
 
@@ -88,33 +92,10 @@ if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
     getToFlask(my_input)   
-    # url = "http://localhost:8501/GeneratedBook"
-    # webbrowser.open_new_tab(url)
-
 
 
 # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
-
-#MAKE THIS CHECK IF BUCKET HAS ANYTHING IN IT, BEFORE INSTRUCTING TO GO TO STORY TAB!
-
-
-
-
-# def getToFlask(prompt):
-#     BASE = "http://34.172.48.39:5000/"
-#     # print("this is the passed prompt:",prompt)
-#     frontEndPrompt = prompt
-#     response = requests.get(BASE + "book/"+ frontEndPrompt)
-#     # response = requests.get(BASE + prompt)
-
-#     if (response.status_code == 200):
-#         print("The request was a success!")
-#     # Code here will only run if the request is successful
-#     elif (response.status_code == 404):
-#         print("Result not found!")
-
-
-# getToFlask(st.session_state["my_input"])    
+  
 
 imagePrompts = {}
 
@@ -149,7 +130,8 @@ def list_blobs_with_prefix( ):
             # imagePrompts[blob.name] = blob.metadata['prompt']
             print("imagePrompts",imagePrompts)
             print("imagePrompts.values()",imagePrompts.values())
-            st.write(blob.metadata['text']) 
+            # st.write(blob.metadata['text']) 
+            st.markdown(card(blob.metadata['text']), unsafe_allow_html=True)
             st.image(blob.download_as_bytes())
 
 
