@@ -75,14 +75,17 @@ if "my_input" not in st.session_state: #set the session state to be empty
 
 st.write("This is a GCP project utilizing EleutherAI’s  GPT-J-6B and Imagen-pytorch Real-ESRGAN to generate text and images to form your own custom book.")
 
-st_lottie( #create a lottie animation
+gears = st.empty()
+with gears.container():
+    st_lottie( #create a lottie animation
     lottie_gears,
     height=500,
     width=500,
-)
-st.write("Please enter the first sentence of your children's book.")
-my_input = st.text_input("Example: \"The rainbow unicorn and fluffy giraffe went hopping along the clouds.\"", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
-submit = st.button("Submit") #set submit
+    )
+
+    st.write("Please enter the first sentence of your children's book.")
+    my_input = st.text_input("Example: \"The rainbow unicorn and fluffy giraffe went hopping along the clouds.\"", st.session_state["my_input"]) #change prompt to be a text input and set the session state to input value
+    submit = st.button("Submit") #set submit
 
 
 if "submitted" not in st.session_state: #set the session state to be False
@@ -91,7 +94,8 @@ if "submitted" not in st.session_state: #set the session state to be False
 if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
-    getToFlask(my_input)   
+    # getToFlask(my_input)
+    gears.empty() #empty the lottie animation   
 
 
 # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
