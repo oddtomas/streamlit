@@ -6,3 +6,50 @@
     border-radius: 5px;
     cursor: pointer;
 } */
+
+.nav{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    text-decoration: none;
+    /* align-items: center; */
+    /* padding: 0 10px;
+    margin: 0 10px; */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* cursor: pointer; */
+    /* orientation: horizontal; */
+}
+
+.card-text{
+    display: flex;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 73%;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 0px;
+    margin-top: 40px;
+    background-color: #edf6f7;
+
+}
+
+.css-1v0mbdj.etr89bj1{
+    /* display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    text-decoration: none;
+    align-items: center;
+    padding: 0 10px;
+    margin: 10px 10px; */
+    /* padding:0%;
+    border: 1px solid #ccc;
+    border-radius: 5px; */
+    /* height: 100px */
+    margin-top: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+}
