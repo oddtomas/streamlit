@@ -16,6 +16,19 @@ def card(text): #create a card with the id, text and image
     </div>
     """
 
+st.markdown("""
+
+<style>
+
+
+ .css-10xlvwk.e1fqkh3o3 {
+        display: none;
+    }
+
+</style>
+
+""", unsafe_allow_html=True)
+
 def list_blobs_with_prefix( ):
 # def list_blobs_with_prefix( prefix ):
 
