@@ -17,7 +17,7 @@ def card(text): #create a card with the id, text and image
     </div>
     </div>
     """
-    
+#    
 # pdf = st.empty()
 # with pdf.container():
     # with open("book.pdf", "rb") as pdf_file:
