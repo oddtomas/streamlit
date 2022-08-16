@@ -51,11 +51,11 @@ def getToFlask(prompt):
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
-st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
-def navFinishedBook():
-    if st.session_state.get("finished", True):
-        st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
+# st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
+# st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
+# def navFinishedBook():
+#     if st.session_state.get("finished", True):
+#         st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
 # exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
 def card(text): #create a card with the id, text and image
     return f"""
@@ -102,6 +102,7 @@ if submit: #if the submit button is pressed, do this stuff.
   
 
 imagePrompts = {}
+actualImages = []
 
 
 def list_blobs_with_prefix( ):
@@ -130,10 +131,14 @@ def list_blobs_with_prefix( ):
         elif len(imagePrompts) >= 11:
             print("collection full")
         else:
+            actualImages.append(blob)
             imagePrompts.update({blob.name: blob.metadata['text']})
             # imagePrompts[blob.name] = blob.metadata['prompt']
             print("imagePrompts",imagePrompts)
             print("imagePrompts.values()",imagePrompts.values())
+            print("actualImages",actualImages)
+            # image1 = actualImages[0].download_as_bytes()
+            # st.image(image1)
             # st.write(blob.metadata['text']) 
             st.markdown(card(blob.metadata['text']), unsafe_allow_html=True)
             st.image(blob.download_as_bytes())
@@ -180,13 +185,15 @@ def subscriberz():
             # list_blobs_with_prefix("results/")
             streaming_pull_future.result() 
             print("this is the dictionary at the end of a loop",imagePrompts)
+            print("actualImages array at the end",actualImages)
             print("this is the end of the subscriber")
             if len(imagePrompts) >= 11:
                 yoda.empty()
                 # placeholder.empty()
                 placeholder.text("Your book is ready SADAIAN!!")
+                st.markdown('<a href="/SavedBook" target="_self" class="nav"> Save your finished book!</a>', unsafe_allow_html=True)
                 st.session_state["finished"] = True
-                navFinishedBook()
+                # navFinishedBook()
                 streaming_pull_future.cancel()
                 st.stop()
             else:
@@ -212,6 +219,7 @@ if st.session_state["submitted"] == True:
         width=250,
         key="yoda",
         )
+    
     subscriberz()
 
 
