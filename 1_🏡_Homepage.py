@@ -126,9 +126,9 @@ def list_blobs_with_prefix( ):
 
     for blob in blobs:
         
-        if blob.metadata['text'] in imagePrompts.values():
+        if blob.metadata['text'] in imagePrompts.values() and blob.name in imagePrompts.keys():
             print("already in collection")
-        elif len(imagePrompts) >= 11:
+        elif len(imagePrompts) >= 10:
             print("collection full")
         else:
             actualImages.append(blob)
@@ -187,7 +187,7 @@ def subscriberz():
             print("this is the dictionary at the end of a loop",imagePrompts)
             print("actualImages array at the end",actualImages)
             print("this is the end of the subscriber")
-            if len(imagePrompts) >= 11:
+            if len(imagePrompts) >= 10:
                 yoda.empty()
                 # placeholder.empty()
                 placeholder.text("Your book is ready SADAIAN!!")
