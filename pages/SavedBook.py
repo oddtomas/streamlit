@@ -150,7 +150,7 @@ def list_blobs_with_prefix( ):
 
     for blob in blobs:
 
-        if blob.metadata['text'] in imagePrompts.values():
+        if blob.metadata['text'] in imagePrompts.values() and blob.name in imagePrompts.keys():
             print("already in collection")
         elif len(imagePrompts) >= 11:
             print("collection full")
