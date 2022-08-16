@@ -20,6 +20,7 @@
     border-radius: 5px;
     /* cursor: pointer; */
     /* orientation: horizontal; */
+    width: 73%;
 }
 
 .card-text{
@@ -54,9 +55,9 @@
 
 }
 
-.css-10xlvwk.e1fqkh3o3 {
+/* .css-10xlvwk.e1fqkh3o3 {
     display: none;
-}
+} */
 
 
 /* svg{

@@ -6,11 +6,11 @@ import requests
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
-st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
-def navFinishedBook():
-    if st.session_state.get("finished", True):
-        st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
+# st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
+# st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
+# def navFinishedBook():
+#     if st.session_state.get("finished", True):
+#         st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)
