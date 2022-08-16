@@ -39,7 +39,7 @@ def savePDF():
     text8 = imagePrompts['IMAGE_n07.jpg'].encode('latin-1', 'replace').decode('latin-1')
     text9 = imagePrompts['IMAGE_n08.jpg'].encode('latin-1', 'replace').decode('latin-1')
     text10 = imagePrompts['IMAGE_n09.jpg'].encode('latin-1', 'replace').decode('latin-1')
-    text11 = imagePrompts['IMAGE_n10.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    # text11 = imagePrompts['IMAGE_n10.jpg'].encode('latin-1', 'replace').decode('latin-1')
 
     image1 = 'image0.jpg'
     image2 = 'image1.jpg'
@@ -51,7 +51,7 @@ def savePDF():
     image8 = 'image7.jpg'
     image9 = 'image8.jpg'
     image10 = 'image9.jpg'
-    image11 = 'image10.jpg'
+    # image11 = 'image10.jpg'
 
     pdf = FPDF()
     pdf.add_page()
@@ -106,10 +106,11 @@ def savePDF():
     pdf.ln()
     pdf.image(image10,w=100,h=100)
     # #############################
-    pdf.ln()
-    pdf.write(4,text11 )
-    pdf.ln()
-    pdf.image(image11,w=100,h=100)
+    # pdf.ln()
+    # pdf.write(4,text11 )
+    # pdf.ln()
+    # pdf.image(image11,w=100,h=100)
+    # #############################
     pdf.output('book.pdf')
     #############################
     with open("book.pdf", "rb") as pdf_file:
@@ -152,7 +153,7 @@ def list_blobs_with_prefix( ):
 
         if blob.metadata['text'] in imagePrompts.values() and blob.name in imagePrompts.keys():
             print("already in collection")
-        elif len(imagePrompts) >= 11:
+        elif len(imagePrompts) >= 10:
             print("collection full")
         else:
             print("blob", blob.name)
@@ -170,44 +171,10 @@ def list_blobs_with_prefix( ):
             st.image(blob.download_as_bytes())
             
 
-# list_blobs_with_prefix("results/")
 list_blobs_with_prefix()
 
-# submit = st.button("Save as a PDF") #set submit
-# if submit: #if the submit button is pressed, do this stuff.
 savePDF()
 
-# with open("book.pdf", "rb") as pdf_file:
-#     PDFbyte = pdf_file.read()
-
-# st.download_button(label="Download PDF", 
-#         data=PDFbyte,
-#         file_name="SADA R&D Babybook.pdf",
-#         mime='application/octet-stream')
-# print("actualImages",actualImages)
-# print("imagePrompts",imagePrompts)
-# st.write(imagePrompts['IMAGE_n00.jpg'])
-# st.image(actualImages[0].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n01.jpg'])
-# st.image(actualImages[1].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n02.jpg'])
-# st.image(actualImages[2].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n03.jpg'])
-# st.image(actualImages[3].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n04.jpg'])
-# st.image(actualImages[4].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n05.jpg'])
-# st.image(actualImages[5].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n06.jpg'])
-# st.image(actualImages[6].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n07.jpg'])
-# st.image(actualImages[7].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n08.jpg'])
-# st.image(actualImages[8].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n09.jpg'])
-# st.image(actualImages[9].download_as_bytes())
-# st.write(imagePrompts['IMAGE_n10.jpg'])
-# st.image(actualImages[10].download_as_bytes())
 
 
 
