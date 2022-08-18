@@ -44,6 +44,18 @@ def sendEmail():
     with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
         smtp.login(email_sender,email_password)
         smtp.sendmail(email_sender,email_receiver,em.as_string())
+        
+def delete_blob():
+    """Deletes a blob from the bucket."""
+    credentials = service_account.Credentials.from_service_account_info( 
+    st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
+)
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.get_bucket("et-test-bucket")
+
+    blobs = bucket.list_blobs() #list all the blobs in the bucket
+    for blob in blobs:
+        blob.delete()
 
 lottie_gears = load_lottiefile("lottie/gears.json")
 lottie_yoda = load_lottiefile("lottie/yoda.json")
@@ -104,12 +116,13 @@ if "submitted" not in st.session_state: #set the session state to be False
 if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
+    delete_blob()
     getToFlask(my_input)
     gears.empty() #empty the lottie animation   
 
 
 # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
-  
+
 
 imagePrompts = {}
 actualImages = []
