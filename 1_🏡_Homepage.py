@@ -9,25 +9,137 @@ from google.cloud import pubsub_v1
 import os
 from concurrent.futures import TimeoutError
 import time
+from fpdf import FPDF
+from email.message import EmailMessage
+import ssl
+import smtplib
+# from pages.SavedBook import savePDF
+
+
 
 st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
 
-#USE FOR NAVBAR?
-    # url = "http://localhost:8501/GeneratedBook"
-    # webbrowser.open_new_tab(url)
+def sendEmail():    
+    email_sender = 'SADAUCOHORT6@gmail.com' 
+    email_password = 'cubfalohweraqgyi' 
+    email_receiver = 'thomas.nguyen@sada.com' 
 
-if "finished" not in st.session_state: #set the session state to be False
-    st.session_state["finished"] = False
+    subject = 'Your book is done!'
+    body = """
+    The generator just finished creating your custom book, go back to the site to check it out or download it!
+    """
+
+    em = EmailMessage()
+    em['From'] = email_sender
+    em['To'] = email_receiver
+    em['Subject'] = subject
+    em.set_content(body)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
+        smtp.login(email_sender,email_password)
+        smtp.sendmail(email_sender,email_receiver,em.as_string())
+
+
+def savePDF():
+    text1 = imagePrompts['IMAGE_n00.jpg'].encode('latin-1', 'replace').decode('latin-1') #exception for non latin-1 characters
+    text2 = imagePrompts['IMAGE_n01.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text3 = imagePrompts['IMAGE_n02.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text4 = imagePrompts['IMAGE_n03.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text5 = imagePrompts['IMAGE_n04.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text6 = imagePrompts['IMAGE_n05.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text7 = imagePrompts['IMAGE_n06.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text8 = imagePrompts['IMAGE_n07.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text9 = imagePrompts['IMAGE_n08.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    text10 = imagePrompts['IMAGE_n09.jpg'].encode('latin-1', 'replace').decode('latin-1')
+    # text11 = imagePrompts['IMAGE_n10.jpg'].encode('latin-1', 'replace').decode('latin-1')
+
+    image1 = 'image0.jpg'
+    image2 = 'image1.jpg'
+    image3 = 'image2.jpg'
+    image4 = 'image3.jpg'
+    image5 = 'image4.jpg'
+    image6 = 'image5.jpg'
+    image7 = 'image6.jpg'
+    image8 = 'image7.jpg'
+    image9 = 'image8.jpg'
+    image10 = 'image9.jpg'
+    # image11 = 'image10.jpg'
+
+    pdf = FPDF()
+    pdf.set_auto_page_break(True, margin = 30)
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 15)
+    pdf.cell(55)
+    pdf.set_line_width(1)
+    pdf.cell(75, 10, 'SADA R&D Book Generator', 1, 0, 'C')
+    pdf.ln(20)
+    pdf.set_font('Arial', 'I', 12)
+    pdf.set_text_color(0, 0, 0)
+    # pdf.image('sada.jpeg', w = 20, h = 20)
+    pdf.multi_cell(0, 5, text1, align='C')
+    pdf.cell(45)
+    pdf.image(image1,w=100,h=100)
+    # pdf.ln(10)
+    pdf.write(4,'-------------------------------------------------------------------------------------------------------------------------------------')
+    pdf.ln()
+    pdf.multi_cell(0, 5, text2, align='C')
+    pdf.cell(45)
+    pdf.image(image2,w=100,h=100)
+    pdf.add_page()    
+    #####################################
+    pdf.ln(15)
+    pdf.multi_cell(0, 5, text3, align='C')
+    pdf.cell(45)
+    pdf.image(image3,w=100,h=100)
+    pdf.ln(5)
+    pdf.write(4,'-------------------------------------------------------------------------------------------------------------------------------------')
+    pdf.ln(5)
+    pdf.multi_cell(0, 5, text4, align='C')
+    pdf.cell(45)
+    pdf.image(image4,w=100,h=100)
+    pdf.add_page()
+    #####################################
+    pdf.ln(15)
+    pdf.multi_cell(0, 5, text5, align='C')
+    pdf.cell(45)
+    pdf.image(image5,w=100,h=100)
+    pdf.ln(5)
+    pdf.write(4,'-------------------------------------------------------------------------------------------------------------------------------------')
+    pdf.ln(5)
+    pdf.multi_cell(0, 5, text6, align='C')
+    pdf.cell(45)
+    pdf.image(image6,w=100,h=100)
+    pdf.add_page()
+    #####################################
+    pdf.ln(15)
+    pdf.multi_cell(0, 5, text7, align='C')
+    pdf.cell(45)
+    pdf.image(image7,w=100,h=100)
+    pdf.ln(5)
+    pdf.write(4,'-------------------------------------------------------------------------------------------------------------------------------------')
+    pdf.ln(5)
+    pdf.multi_cell(0, 5, text8, align='C')
+    pdf.cell(45)
+    pdf.image(image8,w=100,h=100)
+    pdf.add_page()
+    #####################################
+    pdf.ln(15)
+    pdf.multi_cell(0, 5, text9, align='C')
+    pdf.cell(45)
+    pdf.image(image9,w=100,h=100)
+    pdf.ln(5)
+    pdf.write(4,'-------------------------------------------------------------------------------------------------------------------------------------')
+    pdf.ln(5)
+    pdf.multi_cell(0, 5, text10, align='C')
+    pdf.cell(45)
+    pdf.image(image10,w=100,h=100)   
+    pdf.output('book.pdf')
+    #############################
 
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)
-
-# def load_lottieurl(url: str): #load the lottie file from the url
-#     r = requests.get(url)
-#     if r.status_code != 200:
-#         return None
-#     return r.json()
 
 lottie_gears = load_lottiefile("lottie/gears.json")
 lottie_yoda = load_lottiefile("lottie/yoda.json")
@@ -51,12 +163,6 @@ def getToFlask(prompt):
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
-# st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
-# def navFinishedBook():
-#     if st.session_state.get("finished", True):
-#         st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
-# exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
 def card(text): #create a card with the id, text and image
     return f"""
     <div class="card" style="width: 10 rem;">
@@ -94,7 +200,7 @@ if "submitted" not in st.session_state: #set the session state to be False
 if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
-    getToFlask(my_input)
+    # getToFlask(my_input)
     gears.empty() #empty the lottie animation   
 
 
@@ -106,11 +212,7 @@ actualImages = []
 
 
 def list_blobs_with_prefix( ):
-# def list_blobs_with_prefix( prefix ):
-#     credentials = service_account.Credentials.from_service_account_info( 
-#     st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
-# )
-   
+# def list_blobs_with_prefix( prefix ):   
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
 )
@@ -122,6 +224,7 @@ def list_blobs_with_prefix( ):
     # blobs = bucket.list_blobs(prefix=prefix)
 
     print('Blobs:', blobs)
+    ii = 0
 
 
     for blob in blobs:
@@ -133,13 +236,8 @@ def list_blobs_with_prefix( ):
         else:
             actualImages.append(blob)
             imagePrompts.update({blob.name: blob.metadata['text']})
-            # imagePrompts[blob.name] = blob.metadata['prompt']
-            print("imagePrompts",imagePrompts)
-            print("imagePrompts.values()",imagePrompts.values())
-            print("actualImages",actualImages)
-            # image1 = actualImages[0].download_as_bytes()
-            # st.image(image1)
-            # st.write(blob.metadata['text']) 
+            blob.download_to_filename('image{0}.jpg'.format(ii))
+            ii+=1
             st.markdown(card(blob.metadata['text']), unsafe_allow_html=True)
             st.image(blob.download_as_bytes())
 
@@ -147,16 +245,10 @@ def list_blobs_with_prefix( ):
 # ###########################`###############################
 
 def subscriberz():
-    # credentials_path = '/Users/thomas.nguyen/Desktop/streamlit/.streamlit/key.json'
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS']
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
 )
    
-#     credentials = service_account.Credentials.from_service_account_info( 
-#     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
-# )
 
     timeout = 10
 
@@ -191,13 +283,18 @@ def subscriberz():
                 yoda.empty()
                 # placeholder.empty()
                 placeholder.text("Your book is ready SADAIAN!!")
-                st.markdown('<a href="/SavedBook" target="_self" class="nav"> Save your finished book!</a>', unsafe_allow_html=True)
-                st.session_state["finished"] = True
-                # navFinishedBook()
+                sendEmail()
+                savePDF()
+                with open("book.pdf", "rb") as pdf_file:
+                    PDFbyte = pdf_file.read()
+                st.download_button(label="Download PDF", 
+                    data=PDFbyte,
+                    file_name="SADA R&D Babybook.pdf",
+                    mime='application/octet-stream')
                 streaming_pull_future.cancel()
                 st.stop()
+                
             else:
-                placeholder.text("Your book is still generating.. patience young padawan")
                 subscriberz()
 
 if st.session_state["submitted"] == True:
@@ -211,6 +308,7 @@ if st.session_state["submitted"] == True:
             my_bar.progress(percent_complete + 1)
         time.sleep(5)
     placeholder.empty()
+    placeholder.text("Your book is still generating.. patience young padawan")
     yoda = st.empty()
     with yoda.container():
         st_lottie( #create a lottie animation
