@@ -9,6 +9,9 @@ from google.cloud import pubsub_v1
 import os
 from concurrent.futures import TimeoutError
 import time
+from email.message import EmailMessage
+import ssl
+import smtplib
 
 st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
 
