@@ -136,6 +136,12 @@ def savePDF():
     pdf.cell(45)
     pdf.image(image10,w=100,h=100)   
     pdf.output('book.pdf')
+    with open("book.pdf", "rb") as pdf_file:
+        PDFbyte = pdf_file.read()
+    st.download_button(label="Download PDF", 
+        data=PDFbyte,
+        file_name="SADA R&D Babybook.pdf",
+        mime='application/octet-stream')
     #############################
 
 def load_lottiefile(filepath: str): #load the lottie file from the filepath
@@ -286,12 +292,6 @@ def subscriberz():
                 placeholder.text("Your book is ready SADAIAN!!")
                 sendEmail()
                 savePDF()
-                with open("book.pdf", "rb") as pdf_file:
-                    PDFbyte = pdf_file.read()
-                st.download_button(label="Download PDF", 
-                    data=PDFbyte,
-                    file_name="SADA R&D Babybook.pdf",
-                    mime='application/octet-stream')
                 streaming_pull_future.cancel()
                 st.stop()
                 
