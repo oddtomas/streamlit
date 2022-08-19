@@ -207,7 +207,6 @@ def subscriberz():
                 streaming_pull_future.cancel()
                 st.stop()
             else:
-                placeholder.text("Your book is still generating.. patience young padawan")
                 subscriberz()
 
 if st.session_state["submitted"] == True:
@@ -221,6 +220,7 @@ if st.session_state["submitted"] == True:
             my_bar.progress(percent_complete + 1)
         time.sleep(5)
     placeholder.empty()
+    placeholder.text("Your book is still generating.. patience young padawan")
     yoda = st.empty()
     with yoda.container():
         st_lottie( #create a lottie animation
