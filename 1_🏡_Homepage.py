@@ -9,12 +9,12 @@ from google.cloud import pubsub_v1
 import os
 from concurrent.futures import TimeoutError
 import time
+from email.message import EmailMessage
+import ssl
+import smtplib
 
 st.set_page_config(page_title="SADA R&D Book Generator", page_icon="🤖") #change browser tab title
 
-#USE FOR NAVBAR?
-    # url = "http://localhost:8501/GeneratedBook"
-    # webbrowser.open_new_tab(url)
 
 if "finished" not in st.session_state: #set the session state to be False
     st.session_state["finished"] = False
@@ -23,11 +23,39 @@ def load_lottiefile(filepath: str): #load the lottie file from the filepath
     with open(filepath, "r") as f:
         return json.load(f)
 
-# def load_lottieurl(url: str): #load the lottie file from the url
-#     r = requests.get(url)
-#     if r.status_code != 200:
-#         return None
-#     return r.json()
+def sendEmail():    
+    email_sender = 'SADAUCOHORT6@gmail.com' 
+    email_password = 'cubfalohweraqgyi' 
+    email_receiver = 'thomas.nguyen@sada.com' 
+    
+
+    subject = 'Your book is done!'
+    body = """
+    The generator just finished creating your custom book, go back to the site to check it out or download it!
+    """
+
+    em = EmailMessage()
+    em['From'] = email_sender
+    em['To'] = email_receiver
+    em['Subject'] = subject
+    em.set_content(body)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
+        smtp.login(email_sender,email_password)
+        smtp.sendmail(email_sender,email_receiver,em.as_string())
+        
+def delete_blob():
+    """Deletes a blob from the bucket."""
+    credentials = service_account.Credentials.from_service_account_info( 
+    st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
+)
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.get_bucket("et-test-bucket")
+
+    blobs = bucket.list_blobs() #list all the blobs in the bucket
+    for blob in blobs:
+        blob.delete()
 
 lottie_gears = load_lottiefile("lottie/gears.json")
 lottie_yoda = load_lottiefile("lottie/yoda.json")
@@ -51,12 +79,6 @@ def getToFlask(prompt):
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# st.markdown('<a href="/" target="_self" class="nav" >Home</a>', unsafe_allow_html=True)
-# st.markdown('<a href="/About" target="_self" class="nav" >About</a>', unsafe_allow_html=True)
-# def navFinishedBook():
-#     if st.session_state.get("finished", True):
-#         st.markdown('<a href="/SavedBook" target="_self" class="nav">Finished BooK</a>', unsafe_allow_html=True)
-# exec(open("GeneratedStorybook.py").read()) #execute the GeneratedStorybook.py file
 def card(text): #create a card with the id, text and image
     return f"""
     <div class="card" style="width: 10 rem;">
@@ -94,12 +116,13 @@ if "submitted" not in st.session_state: #set the session state to be False
 if submit: #if the submit button is pressed, do this stuff.
     st.session_state["submitted"] = True #set the session state to be True
     st.session_state["my_input"] = my_input #set the session state to be the user input
+    delete_blob()
     getToFlask(my_input)
     gears.empty() #empty the lottie animation   
 
 
 # exec(open("testoutput.py").read()) #execute the GeneratedStorybook.py file
-  
+
 
 imagePrompts = {}
 actualImages = []
@@ -107,9 +130,6 @@ actualImages = []
 
 def list_blobs_with_prefix( ):
 # def list_blobs_with_prefix( prefix ):
-#     credentials = service_account.Credentials.from_service_account_info( 
-#     st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
-# )
    
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
@@ -137,9 +157,6 @@ def list_blobs_with_prefix( ):
             print("imagePrompts",imagePrompts)
             print("imagePrompts.values()",imagePrompts.values())
             print("actualImages",actualImages)
-            # image1 = actualImages[0].download_as_bytes()
-            # st.image(image1)
-            # st.write(blob.metadata['text']) 
             st.markdown(card(blob.metadata['text']), unsafe_allow_html=True)
             st.image(blob.download_as_bytes())
 
@@ -147,16 +164,9 @@ def list_blobs_with_prefix( ):
 # ###########################`###############################
 
 def subscriberz():
-    # credentials_path = '/Users/thomas.nguyen/Desktop/streamlit/.streamlit/key.json'
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS']
     credentials = service_account.Credentials.from_service_account_info( 
     st.secrets["GOOGLE_APPLICATION_CREDENTIALS"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
 )
-   
-#     credentials = service_account.Credentials.from_service_account_info( 
-#     st.secrets["gcp_service_account"] #change to secrets, this lives in the "secrets.toml" file under ".streamlit" directory
-# )
 
     timeout = 10
 
@@ -193,11 +203,10 @@ def subscriberz():
                 placeholder.text("Your book is ready SADAIAN!!")
                 st.markdown('<a href="/SavedBook" target="_self" class="nav"> Save your finished book!</a>', unsafe_allow_html=True)
                 st.session_state["finished"] = True
-                # navFinishedBook()
+                sendEmail()
                 streaming_pull_future.cancel()
                 st.stop()
             else:
-                placeholder.text("Your book is still generating.. patience young padawan")
                 subscriberz()
 
 if st.session_state["submitted"] == True:
@@ -211,6 +220,7 @@ if st.session_state["submitted"] == True:
             my_bar.progress(percent_complete + 1)
         time.sleep(5)
     placeholder.empty()
+    placeholder.text("Your book is still generating.. patience young padawan")
     yoda = st.empty()
     with yoda.container():
         st_lottie( #create a lottie animation

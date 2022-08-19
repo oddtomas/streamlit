@@ -17,15 +17,7 @@ def card(text): #create a card with the id, text and image
     </div>
     </div>
     """
-#    
-# pdf = st.empty()
-# with pdf.container():
-    # with open("book.pdf", "rb") as pdf_file:
-    #     PDFbyte = pdf_file.read()
-    # st.download_button(label="Download PDF", 
-    #         data=PDFbyte,
-    #         file_name="SADA R&D Babybook.pdf",
-    #         mime='application/octet-stream')
+
 
 
 def savePDF():
